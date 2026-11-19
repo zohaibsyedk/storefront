@@ -14,10 +14,11 @@ import {
   type OnboardingDraft,
   type StepId,
 } from "@storefront/core";
-import { ACCOUNTS, MockChain, accrueOps, fundWallet, logAction, payFromWallet, reconcile, settleOps, syncAllowance, type Chain } from "@storefront/treasury";
+import { ACCOUNTS, MockChain, SolanaChain, solanaConfig, accrueOps, fundWallet, logAction, payFromWallet, reconcile, settleOps, syncAllowance, type Chain } from "@storefront/treasury";
 import { draftPlan } from "./draft";
 import { MockRegistrar, type Registrar } from "./domains";
 import { llmProvider } from "./llm";
+import { dataDir } from "./store";
 import { createMandate } from "./mandate";
 import { applyPatch, describeOutcome, diffPlans, interpretChange, patchIsEmpty } from "./revise";
 import { curateDashboard } from "./dashboard";
@@ -26,7 +27,15 @@ import { paceBudgets } from "./engine";
 /** Estimated model cost per agent job, drawn from the 20% reserve. Simulated in this build. */
 export const OPS_COST: Record<string, Micro> = { draft: usd(0.9), revise: usd(0.25), optimise: usd(0.05), report: usd(0.2), curate: usd(0.1), chat: usd(0.02) };
 
-let chainFactory: (state: BusinessState) => Chain = (state) => new MockChain(state);
+/**
+ * Which chain a business uses is fixed when its wallet is created: STOREFRONT_CHAIN=devnet|localnet
+ * selects real Solana for new businesses; everything else (and every existing mock wallet) stays mock.
+ */
+let chainFactory: (state: BusinessState) => Chain = (state) => {
+  const kind = state.wallet?.chain ?? (process.env.STOREFRONT_CHAIN === "devnet" || process.env.STOREFRONT_CHAIN === "localnet" ? process.env.STOREFRONT_CHAIN : "mock");
+  if (kind === "devnet" || kind === "localnet") return new SolanaChain(state, solanaConfig(dataDir(), kind));
+  return new MockChain(state);
+};
 export function setChainFactory(f: (state: BusinessState) => Chain) {
   chainFactory = f;
 }

@@ -9,7 +9,7 @@ import { assertMicro, fakeAddress, hashString, type BusinessState, type ChainTx,
  * BusinessState, the LLM context or logs.
  */
 export interface Chain {
-  kind: "mock" | "devnet";
+  kind: "mock" | "devnet" | "localnet";
   createWallet(label: string): Promise<{ address: string; keyRef: string }>;
   balance(address: string): Promise<Micro>;
   allowance(owner: string): Promise<{ delegate: string | null; amount: Micro }>;

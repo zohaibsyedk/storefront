@@ -13,7 +13,9 @@
     "test": "vitest run",
     "demo": "tsx scripts/demo.mts",
     "check": "npm run typecheck && npm run lint && npm run test",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "chain:local": "solana-test-validator --ledger .data/ledger --reset --quiet",
+    "demo:solana": "STOREFRONT_CHAIN=localnet tsx scripts/demo.mts"
   },
   "devDependencies": {
     "@playwright/test": "^1.65.1",

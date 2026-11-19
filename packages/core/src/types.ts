@@ -640,7 +640,7 @@ export interface BusinessState {
   plans: LaunchPlan[];
   changeRequests: ChangeRequest[];
   mandate?: Mandate;
-  wallet?: { address: string; keyRef: string; delegate: string; delegateRef: string; chain: "mock" | "devnet"; mint?: string };
+  wallet?: { address: string; keyRef: string; delegate: string; delegateRef: string; chain: "mock" | "devnet" | "localnet"; mint?: string };
   chain: { accounts: Record<string, { balance: Micro; delegate?: string; delegated: Micro }>; txs: ChainTx[] };
   ledger: LedgerEntry[];
   card: { frozen: boolean; txns: CardTxn[]; unbilled: Record<Platform, Micro>; threshold: Record<Platform, Micro> };

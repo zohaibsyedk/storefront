@@ -20,7 +20,7 @@ export default function Wallet() {
       <h1>Wallet</h1>
       <p className="mt-3 max-w-2xl text-lg">Your money is held as USDC in a wallet that belongs to your agent. The ad platforms are paid by a card that can only pull up to a set limit from it.</p>
       <p className="hint mt-1 break-all num">
-        {state.wallet.chain === "mock" ? "Test chain" : "Solana devnet"} address {state.wallet.address}
+        {state.wallet.chain === "mock" ? "Simulated chain" : state.wallet.chain === "devnet" ? "Solana devnet" : "Local Solana validator"}, test USDC. Address {state.wallet.address}
       </p>
       {error && <div className="mt-4"><ErrorNote>{error}</ErrorNote></div>}
       <div className="mt-8 grid gap-10 md:grid-cols-2">
