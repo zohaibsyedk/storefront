@@ -210,7 +210,8 @@ function buildSite(p: BusinessProfile, settings: PlanSettings, domains: DomainSu
   ];
   const galleryPhotos = photos.filter((ph) => ph.id !== heroPhoto?.id).slice(0, 6);
   if (galleryPhotos.length >= 2) sections.push({ id: "gallery", type: "gallery", props: { heading: toneText(tone, { warm: "Have a look", plain: "Photos", formal: "Gallery" }), photoIds: galleryPhotos.map((g) => g.id) } });
-  if (p.customers.bestCustomer?.trim() || p.basics.description.length > 80)
+  // The hero already carries the description, so "about" only earns its place with a photo of the people.
+  if (pickPhoto(photos, "people_at_work", 1) && photos.some((ph) => ph.tag === "team"))
     sections.push({
       id: "story",
       type: "story",

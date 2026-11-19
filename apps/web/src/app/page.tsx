@@ -1,69 +1,71 @@
-import Image from "next/image";
+"use client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { STATUS_WORD } from "@/components/ui";
+
+interface Item {
+  id: string;
+  name: string;
+  status: string;
+  updatedAt: string;
+  step: number;
+  day: number;
+}
 
 export default function Home() {
+  const router = useRouter();
+  const [items, setItems] = useState<Item[] | null>(null);
+  const [starting, setStarting] = useState(false);
+  useEffect(() => {
+    fetch("/api/businesses", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d) => setItems(d.businesses))
+      .catch(() => setItems([]));
+  }, []);
+  async function start() {
+    setStarting(true);
+    const res = await fetch("/api/businesses", { method: "POST" });
+    const { id } = await res.json();
+    router.push(`/onboarding/${id}`);
+  }
+  const href = (b: Item) => (b.status === "onboarding" ? `/onboarding/${b.id}` : b.status === "review" ? `/b/${b.id}/plan` : b.status === "approved" ? `/b/${b.id}/launch` : `/b/${b.id}/dashboard`);
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main>
+      <div className="awning" />
+      <div className="mx-auto max-w-2xl px-5 pb-16 pt-12 rise">
+        <p className="display text-xl text-blue">Storefront</p>
+        <h1 className="mt-3">Tell us about your shop once. We handle the marketing from there.</h1>
+        <p className="mt-4 max-w-xl text-lg">
+          Answer a few questions. You get a plan to approve: ads on Google, Facebook and Instagram, a website, and your Google listing. After that it runs itself inside the budget you set, and shows you where every dollar went.
+        </p>
+        <div className="mt-7">
+          <button className="btn w-full sm:w-auto" onClick={start} disabled={starting}>
+            {starting ? "Opening" : "Set up my business"}
+          </button>
+          <p className="hint mt-3">About ten minutes. You can stop and pick up later on any device.</p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        {items && items.length > 0 && (
+          <section className="mt-12" aria-label="Businesses you already started">
+            <h2>Pick up where you left off</h2>
+            <ul className="mt-3 divide-y-[1.5px] divide-line rounded-[14px] bg-white">
+              {items.map((b) => (
+                <li key={b.id}>
+                  <Link href={href(b)} className="flex items-center justify-between gap-3 px-4 py-3">
+                    <span>
+                      <span className="block font-bold">{b.name}</span>
+                      <span className="hint">
+                        {b.status === "onboarding" ? `Setting up, on step ${Math.min(9, (b.step ?? 0) + 1)} of 9` : b.status === "live" ? `Running, day ${b.day}` : STATUS_WORD[b.status]}
+                      </span>
+                    </span>
+                    <span className="tag">Open</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </main>
   );
 }

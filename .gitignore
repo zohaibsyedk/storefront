@@ -6,3 +6,5 @@ node_modules
 *.tsbuildinfo
 .DS_Store
 coverage
+test-results
+apps/web/next-env.d.ts

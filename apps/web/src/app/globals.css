@@ -1,26 +1,349 @@
 @import "tailwindcss";
 
+/* Storefront: enamel shop-sign blue, marigold accent, till-receipt money. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --blue: #1d3fae;
+  --blue-deep: #142c7a;
+  --ink: #111c3d;
+  --sky: #edf1fa;
+  --paper: #ffffff;
+  --marigold: #f6b81a;
+  --marigold-soft: #fff3cc;
+  --brick: #c4382b;
+  --brick-soft: #fbe6e3;
+  --leaf: #1b7a4b;
+  --leaf-soft: #e0f3e8;
+  --line: #c9d2ea;
+  --muted: #55608a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-blue: var(--blue);
+  --color-blue-deep: var(--blue-deep);
+  --color-ink: var(--ink);
+  --color-sky: var(--sky);
+  --color-paper: var(--paper);
+  --color-marigold: var(--marigold);
+  --color-marigold-soft: var(--marigold-soft);
+  --color-brick: var(--brick);
+  --color-brick-soft: var(--brick-soft);
+  --color-leaf: var(--leaf);
+  --color-leaf-soft: var(--leaf-soft);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --font-display: var(--font-bricolage), system-ui, sans-serif;
+  --font-sans: var(--font-atkinson), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  background: var(--sky);
+}
+body {
+  background: var(--sky);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+h1,
+h2,
+h3,
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  font-variation-settings: "wdth" 88;
+}
+h1 {
+  font-size: clamp(2rem, 7vw, 3.25rem);
+}
+h2 {
+  font-size: clamp(1.45rem, 4.5vw, 1.9rem);
+}
+h3 {
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}
+:focus-visible {
+  outline: 3px solid var(--marigold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* The awning: the one loud element. */
+.awning {
+  position: relative;
+  height: 40px;
+  background: repeating-linear-gradient(90deg, var(--blue) 0 28px, #fff 28px 56px);
+  filter: drop-shadow(0 3px 0 rgba(17, 28, 61, 0.16));
+  z-index: 5;
+}
+.awning::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 14px;
+  background:
+    radial-gradient(circle at 14px 0, var(--blue) 13.5px, transparent 14px) 0 0 / 56px 14px repeat-x,
+    radial-gradient(circle at 14px 0, #fff 13.5px, transparent 14px) 28px 0 / 56px 14px repeat-x;
+}
+.awning-sm {
+  height: 14px;
+}
+.awning-sm::after {
+  height: 8px;
+  background:
+    radial-gradient(circle at 14px 0, var(--blue) 7.5px, transparent 8px) 0 0 / 56px 8px repeat-x,
+    radial-gradient(circle at 14px 0, #fff 7.5px, transparent 8px) 28px 0 / 56px 8px repeat-x;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  padding: 0 1.25rem;
+  border-radius: 10px;
+  background: var(--blue);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 0 var(--blue-deep);
+  transition: transform 80ms, box-shadow 80ms;
+  cursor: pointer;
+}
+.btn:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--blue-deep);
+}
+.btn:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+.btn-quiet {
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 4px 0 var(--line);
+  border: 1.5px solid var(--ink);
+}
+.btn-quiet:active:not(:disabled) {
+  box-shadow: 0 1px 0 var(--line);
+}
+.btn-stop {
+  background: var(--brick);
+  box-shadow: 0 4px 0 #8a2319;
+}
+.btn-gold {
+  background: var(--marigold);
+  color: var(--ink);
+  box-shadow: 0 4px 0 #b98505;
+}
+.link {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.field {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.field:focus {
+  outline: 3px solid var(--marigold);
+  outline-offset: 0;
+  border-color: var(--ink);
+}
+textarea.field {
+  min-height: 96px;
+}
+.label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.hint {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.panel {
+  background: #fff;
+  border: 1.5px solid var(--ink);
+  border-radius: 14px;
+  padding: 1.1rem;
+}
+.sheet {
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.1rem;
+}
+.rule {
+  border-top: 1.5px solid var(--line);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  user-select: none;
+}
+.chip[aria-pressed="true"],
+.chip[aria-checked="true"] {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.tag {
+  display: inline-block;
+  padding: 0.1rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  background: var(--sky);
+  color: var(--blue-deep);
+}
+.tag-gold {
+  background: var(--marigold-soft);
+  color: #6b4b00;
+}
+.tag-leaf {
+  background: var(--leaf-soft);
+  color: var(--leaf);
+}
+.tag-brick {
+  background: var(--brick-soft);
+  color: var(--brick);
+}
+
+/* Till receipt: every money summary uses it. */
+.receipt {
+  position: relative;
+  background: #fff;
+  padding: 1.1rem 1.1rem 1.4rem;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 1px 0 var(--line);
+}
+.receipt::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 10px;
+  background:
+    linear-gradient(135deg, #fff 50%, transparent 50%) 0 0 / 14px 10px repeat-x,
+    linear-gradient(225deg, #fff 50%, transparent 50%) 0 0 / 14px 10px repeat-x;
+}
+.receipt-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.28rem 0;
+}
+.receipt-row > .dots {
+  flex: 1;
+  border-bottom: 2px dotted var(--line);
+  transform: translateY(-4px);
+  min-width: 1rem;
+}
+.receipt-total {
+  border-top: 2px solid var(--ink);
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.toggle-card {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  cursor: pointer;
+}
+.toggle-card[aria-pressed="true"] {
+  border-color: var(--blue);
+  background: #f3f6ff;
+  box-shadow: inset 0 0 0 1.5px var(--blue);
+}
+.toggle-card .box {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: 2px solid var(--ink);
+  display: grid;
+  place-items: center;
+  background: #fff;
+  margin-top: 2px;
+}
+.toggle-card[aria-pressed="true"] .box {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.step-in {
+  animation: step-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateX(var(--from, 24px));
   }
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.rise > * {
+  animation: rise 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.rise > *:nth-child(2) {
+  animation-delay: 80ms;
+}
+.rise > *:nth-child(3) {
+  animation-delay: 160ms;
+}
+.rise > *:nth-child(4) {
+  animation-delay: 240ms;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .step-in,
+  .rise > * {
+    animation: none;
+  }
+  .btn {
+    transition: none;
+  }
 }

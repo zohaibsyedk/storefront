@@ -1,7 +1,10 @@
 {
   "name": "storefront",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "npm run dev -w web",
     "build": "npm run build -w web",
@@ -9,9 +12,11 @@
     "lint": "npm run lint -w web",
     "test": "vitest run",
     "demo": "tsx scripts/demo.mts",
-    "check": "npm run typecheck && npm run lint && npm run test"
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.65.1",
     "@types/node": "^22",
     "fast-check": "^4",
     "tsx": "^4",
