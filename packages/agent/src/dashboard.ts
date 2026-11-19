@@ -138,14 +138,16 @@ export function weeklyReport(state: BusinessState): WeeklyReport {
   else next.push("Keep moving budget toward the audiences and ads with the lowest cost per result, within your limits.");
   if (state.campaigns.some((c) => c.status === "paused")) next.push("One platform is paused by a safety check and needs your OK to resume.");
   const todo = state.ownerTasks.filter((t) => t.status === "todo");
-  if (todo.length) next.push(`Waiting on you: ${todo.map((t) => t.title.toLowerCase()).join("; ")}.`);
+  if (todo.length) next.push(`Waiting on you: ${todo.map((t) => t.title).join("; ")}.`);
   return {
     id: shortId("rep"),
     week,
     day,
     headline: wk.results ? `Week ${week}: ${wk.results} ${goal.results} for ${fmtUsd(wk.spend)}` : `Week ${week}: ${fmtUsd(wk.spend)} spent, still gathering results`,
     happened,
-    changed: acts.length ? acts.map((a) => `${a.title}. ${a.reason}`) : ["Nothing changed this week. There was not enough new evidence to justify a move."],
+    changed: acts.length
+      ? [...acts.slice(-4).reverse().map((a) => `${a.title}.`), ...(acts.length > 4 ? [`And ${acts.length - 4} smaller ${acts.length - 4 === 1 ? "change" : "changes"}; each one, with its reason, is under Activity.`] : [])]
+      : ["Nothing changed this week. There was not enough new evidence to justify a move."],
     next,
     spent: wk.spend,
     results: wk.results,

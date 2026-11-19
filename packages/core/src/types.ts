@@ -3,7 +3,7 @@ import type { Micro } from "./money";
 
 export type Platform = "google" | "meta";
 export const PLATFORMS: Platform[] = ["google", "meta"];
-export const PLATFORM_LABEL: Record<Platform, string> = { google: "Google Search", meta: "Facebook & Instagram" };
+export const PLATFORM_LABEL: Record<Platform, string> = { google: "Google Search", meta: "Facebook and Instagram" };
 
 export const GOALS = ["calls", "bookings", "foot_traffic", "online_orders", "leads"] as const;
 export type Goal = (typeof GOALS)[number];
@@ -243,6 +243,8 @@ export interface Creative {
   parentId?: string;
   createdDay: number;
   policy: { ok: boolean; notes: string[] };
+  /** Deterministic copy before any model polish; lets a revision keep wording the owner did not ask to change. */
+  draft?: { headline: string; body: string };
 }
 
 /* ---------- Launch plan ---------- */
@@ -385,6 +387,8 @@ export interface LaunchPlan {
     whyTheseChannels: string;
     success: { metricLabel: string; costPerResultRange: [number, number]; expectedResultsRange: [number, number]; caveat: string };
     emphasis?: string;
+    /** Deterministic summary before model polish. */
+    draftSummary?: string;
   };
   budget: PlanBudget;
   campaigns: PlanCampaign[];

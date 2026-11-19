@@ -4,7 +4,7 @@ import { ATTRIBUTE_LABEL, DAYS, DAY_LABEL, GOAL_LABEL, PLATFORMS, PLATFORM_LABEL
 import type { BusinessView } from "@/lib/api";
 
 const PCOLOR: Record<Platform, string> = { google: "var(--blue)", meta: "var(--ink)" };
-const pname = (p: Platform) => PLATFORM_LABEL[p].replace("&", "and");
+const pname = (p: Platform) => PLATFORM_LABEL[p];
 
 function agg(facts: MetricFact[], pred: (f: MetricFact) => boolean = () => true) {
   let spend = 0, impressions = 0, clicks = 0, results = 0;
@@ -179,8 +179,8 @@ export function WidgetView({ w, view, id }: { w: Widget; view: BusinessView; id:
           <thead>
             <tr className="hint">
               <th className="pb-1 font-normal">Ad</th>
-              <th className="pb-1 text-right font-normal">{goal.results}</th>
-              <th className="pb-1 text-right font-normal">Each</th>
+              <th className="pb-1 pl-3 text-right font-normal">{goal.results[0].toUpperCase() + goal.results.slice(1)}</th>
+              <th className="pb-1 pl-3 text-right font-normal">Each</th>
             </tr>
           </thead>
           <tbody>
@@ -193,8 +193,8 @@ export function WidgetView({ w, view, id }: { w: Widget; view: BusinessView; id:
                   </span>{" "}
                   {r.ad?.status === "paused" && <span className="tag tag-brick">Paused</span>} {r.c.generation > 0 && <span className="tag tag-gold">New test</span>}
                 </td>
-                <td className="py-2 text-right num">{r.results}</td>
-                <td className="py-2 text-right num font-bold">{r.results ? fmtUsd(Math.round(r.cpr)) : "n/a"}</td>
+                <td className="py-2 pl-3 text-right num">{r.results}</td>
+                <td className="py-2 pl-3 text-right num font-bold">{r.results ? fmtUsd(Math.round(r.cpr)) : "n/a"}</td>
               </tr>
             ))}
           </tbody>

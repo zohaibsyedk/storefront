@@ -100,7 +100,7 @@ export async function requestChange(state: BusinessState, area: ChangeRequest["a
     return cr;
   }
   const settings = applyPatch(plan.settings, patch);
-  const next = await draftPlan(profile, { version: plan.version + 1, settings, domains: plan.site?.domainSuggestions, registrar, basedOnChange: cr.id });
+  const next = await draftPlan(profile, { version: plan.version + 1, settings, domains: plan.site?.domainSuggestions, registrar, basedOnChange: cr.id, previous: plan });
   const diff = diffPlans(plan, next);
   if (diff.length === 0) {
     cr.outcome = "The plan already matches that, so nothing changed.";

@@ -173,7 +173,7 @@ export default function PlanPage() {
         <div className="space-y-8">
           {plan.campaigns.map((c) => (
             <div key={c.id}>
-              <h3 className="text-xl">{PLATFORM_LABEL[c.platform].replace("&", "and")}</h3>
+              <h3 className="text-xl">{PLATFORM_LABEL[c.platform]}</h3>
               <p className="hint">
                 {c.objective}. Sends people to {c.destination.replace(/^https?:\/\//, "")}. {c.locations}. {c.schedule}.
               </p>
@@ -224,9 +224,9 @@ export default function PlanPage() {
                       const on = d.domain === plan.site!.chosenDomain;
                       return (
                         <button key={d.domain} role="radio" aria-checked={on} disabled={!review || changing} onClick={() => !on && send("domain", `use the domain ${d.domain}`)} className={`block w-full rounded-xl border-[1.5px] p-3 text-left ${on ? "border-blue bg-[#f3f6ff] shadow-[inset_0_0_0_1.5px_var(--blue)]" : "border-line bg-white"}`}>
-                          <span className="flex items-baseline justify-between gap-3">
-                            <span className="font-bold break-all">{d.domain}</span>
-                            <span className="num flex-none">{fmtUsd(d.price)} a year</span>
+                          <span className="flex flex-wrap items-baseline justify-between gap-x-3">
+                            <span className="font-bold">{d.domain}</span>
+                            <span className="num">{fmtUsd(d.price)} a year</span>
                           </span>
                           <span className="hint block">{[...d.reasons.slice(0, 2), ...d.flags].join(". ")}.</span>
                         </button>
